@@ -11,9 +11,12 @@ jobs:
         uses: actions/checkout@v4
 
       - name: build image 
-        run: docker build ./api/ -t kenny1216/devops-qr-code-api:latest
+        run: |
+           docker build ./api/ -t kenny1216/devops-qr-code-api:latest
+           docker build ./front-end-nextjs/ -t kenny1216/devops-qr-code-frontend:latest
 
       - name: push image to docker hub 
         run: |
           docker login -u kenny1216 -p ${{ secrets.DOCKER_HUB_TOKEN }}
           docker push kenny1216/devops-qr-code-api:latest
+          docker push kenny1216/devops-qr-code-frontend:latest
