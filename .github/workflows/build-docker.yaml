@@ -1,18 +1,19 @@
 name: Build and Publish to Docker Hub
-
 on:
-  [workflow_dispatch]
+  workflow_dispatch:
 
-jobs: 
-  publish_images: 
+jobs:
+  publish_images:
     runs-on: ubuntu-latest
-    steps: 
-      - name: checkout 
+    steps:
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: build image 
+      - name: Login to Docker Hub
+        run: echo "${{ secrets.DOCKER_HUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin
+
+      - name: Build Docker image
         run: docker build ./api/ -t kenny1216/devops-qr-code-api:latest
 
-      - name: push image to docker hub 
-        run: docker login -u kenny1216 -p ${{ secrets.DOCKER_HUB_TOKEN }}
-             docker push kenny1216/devops-qr-code-api:latest
+      - name: Push Docker image
+        run: docker push kenny1216/devops-qr-code-api:latest
